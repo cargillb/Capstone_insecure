@@ -4,7 +4,8 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users(
 	user_id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	username varchar(20) NOT NULL,
-	pword varchar(20) NOT NULL
+	pword varchar(20) NOT NULL,
+  email varchar(50) NOT NULL UNIQUE
 );
 
 DROP TABLE IF EXISTS lists;
@@ -32,10 +33,10 @@ dataType_id int(11) NOT NULL,
 	FOREIGN KEY (list_id) REFERENCES lists (list_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (dataType_id) REFERENCES dataTypes (dataType_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-INSERT INTO users (username, pword)
+INSERT INTO users (email, username, pword)
 VALUES
-("username", "password"),
-("Anonymous", "123456");
+("username@password.com", "username", "password"),
+("Anonymous@123456.com", "Anonymous", "123456");
 
 INSERT INTO lists (user_id, name, description)
 VALUES
