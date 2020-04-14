@@ -10,46 +10,31 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
-    <title>White Hats Login</title>
+    <title>Create Account</title>
 </head>
-
+<style>
+html, body{
+	height: 100%;
+	}
+body{
+	display: flex;
+	align-items:center;
+}
+</style>
 <body>
 
-	<div class = "row justify-content-center">
-		<h2>White Hat Security Project</h2>
-	</div>
-<div class="container">
 
-	<div class="row justify-content-center">
-		<div class = "col justify-content-end my-2">
-			<img src = "WhiteHat.jpg" class ="rounded mx-auto d-block" style="width: 15%;">
-		</div>
-
-	</div>
-	<div class = "row  mt-5">
-		<div class = "col-4 mt-2">
-			<div>
-				<h4><em>Toggle Vulnerabilities</em></h4>
-			</div>
-			<div class="custom-control custom-switch pt-4">
-				<input type="checkbox" class="custom-control-input" id="customSwitch1">
-				<label class="custom-control-label" for="customSwitch1">Example Switch</label>
-			</div>
-			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" id="customSwitch2">
-				<label class="custom-control-label" for="customSwitch2">Example Switch</label>
-			</div>
-			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" id="customSwitch3">
-				<label class="custom-control-label" for="customSwitch3">Example Switch</label>
-			</div>
-		</div>
-		<div class = "col-8">
+<div class="container h-100">
+	<div class="row h-100">
+		<div class = "col my-auto">
 		<!-- source: https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=simple-login-form-->
 			<div class="login-form">
-			
 				<form action="/examples/actions/confirmation.php" method="post">
-					<h2 class="text-center">Log in</h2>       
+					<h2 class="text-center">Account Creation</h2>       
+					<p></p>
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Email" required="required">
+					</div>
 					<div class="form-group">
 						<input type="text" class="form-control" placeholder="Username" required="required">
 					</div>
@@ -57,31 +42,15 @@
 						<input type="password" class="form-control" placeholder="Password" required="required">
 					</div>
 					<div class="form-group">
-						<button type="submit" class="btn btn-primary btn-block">Log in</button>
+						<button type="submit" class="btn btn-primary btn-block">Create Account</button>
 					</div>
-					<div class="mt-4">
-						<div class="d-flex justify-content-center links">
-							Don't have an account? <a href="#" class="ml-2">Sign Up</a>
-						</div>
-						<div class="d-flex justify-content-center links">
-							<a href="#">Forgot your password?</a>
-						</div>   
-						<div class="d-flex justify-content-center links mt-4">
-							<h5><strong>For Testing and Client use: </strong><a href="#">Login as guest</a></h5>
-						</div> 						
-
-					</div>
-				</form>
+        
+			</form>
 			</div>
+
 		</div>
 	</div>
-	
-	<div class = "row align-items-end">
-		<div class="d-flex justify-content-center links mt-4">
-			<h6>Directions for use can go here if we decide we want them</h6>
-		</div>   
-	</div>   
-	
+</div>
 	
 	
 
