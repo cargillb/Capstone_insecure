@@ -6,21 +6,48 @@
 {% block content %}
 <!-- main container -->
 <div class = "container my-3">
-	<h2> {{context.list_name }} </h2>
-	<blockquote class="blockquote">{{ context.list_desc }}</blockquote>
+
+	<h2> {{context.user_name }} To-Do Lists </h2>
+	
 	<table class="table">
 		<thead class=thead-light">
 			<tr>
-				<th scope="col"> Type of Task</th>
+				<th scope="col"> List Name</th>
 				<th scope="col"> Description</th>
-				<th scope="col"> Completed?</th>
 		</thead>
 		<tbody>
 		{% for row in context.rows %}
-
+		<tr> 
+			<td>
+				<!-- This is where to add in <option></option> -->
+			</td>
+			<td>
+				<!-- This is where to add in <option></option> -->
+			</td>
+			<td>                   
+				<div>
+					<button class="btn btn-outline-warning" onclick="delete_list">Delete</button>
+        </div>
+			</td>
+		</tr>
 		</tbody>
 	</table>
 
-</article>
+<!-- form to add locus -->
+    <h3>Add a New List</h3>
+    <form action="/add_list" class="form-inline" method="post">
+        <input name="user_id" type="hidden" value="{{ context.user_id }}">
+        <tr>
+            <th scope="row"><input class="form-control mr-2" name="list_name" placeholder="List Name" type="text">
+            </th>
+            <td>
+								<input class="form-control mr-2" name="list_desc" placeholder="Description" type="text">
+            </td>
+            <td>
+                <button class="btn btn-outline-success" type="submit">Add List</button>
+            </td>
+        </tr>
+    </form>
 
+</div> <!-- close container -->
 {% endblock %}
