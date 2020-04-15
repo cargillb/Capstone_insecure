@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Tasks{% endblock %}
 {% block content %}
 <!-- main container -->
 <div class = "container my-3">
 	<h2> {{context.list_name }} </h2>
 	<blockquote class="blockquote">{{ context.list_desc }}</blockquote>
 	<table class="table">
-		<thead class=thead-light">
+		<thead class="thead-light">
 			<tr>
 				<th scope="col"> Type of Task</th>
 				<!-- Would be cool to implement a sort based on these headers but not necessary for the project -->
@@ -17,17 +17,13 @@
 		{% for row in context.rows %}
 		<tr> 
 			<td>
-				<!-- This is where to add in <option></option> for dataType
-						
-						Can do them as inputs so if the user chooses to edit, they
-						don't have to navigate to another page
-				-->
+				{{ row[2] }}
 			</td>
 			<td>
-				<!-- This is where to add in <option></option> for description -->
+				{{ row[3] }}
 			</td>
 			<td>
-				<!-- This is where to add in <option></option> for completed -->
+				{{ row[4] }}
 			</td>
 			<td>                   
 				<div>
@@ -40,6 +36,7 @@
         </div>
 			</td>
 		</tr>
+		{% endfor %}
 		</tbody>
 	</table>
 <!-- form to add task -->
@@ -52,10 +49,10 @@
             <th scope="row"><input class="form-control mr-2" name="task_name" placeholder="Task Name" type="text">
             </th>
             <td>
-								<input class="form-control mr-2" name="task_desc" placeholder="Description" type="text">
+				<input class="form-control mr-2" name="task_desc" placeholder="Description" type="text">
             </td>
-		        <td>
-							<input class="form-control mr-2" name="task_comp" placeholder="No" type="text">
+		    <td>
+				<input class="form-control mr-2" name="task_comp" placeholder="No" type="text">
             </td>
             <td>
                 <button class="btn btn-outline-success" type="submit">Add Task</button>
