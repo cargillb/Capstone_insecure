@@ -26,10 +26,10 @@ CREATE TABLE dataTypes(
 DROP TABLE IF EXISTS tasks;
 CREATE TABLE tasks(
 	task_id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-list_id int(11) NOT NULL,
-dataType_id int(11) NOT NULL,
+	list_id int(11) NOT NULL,
+	dataType_id int(11) NOT NULL,
 	description varchar(80) NOT NULL,
-	completed boolean,
+	completed boolean NOT NULL DEFAULT 0,
 	FOREIGN KEY (list_id) REFERENCES lists (list_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (dataType_id) REFERENCES dataTypes (dataType_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
