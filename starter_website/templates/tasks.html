@@ -17,13 +17,13 @@
 		{% for row in context.rows %}
 		<tr> 
 			<td>
-				{{ row[2] }}
+				{{ row[2] }}  <!-- dataType_id (Type of Task) -->
 			</td>
 			<td>
-				{{ row[3] }}
+				{{ row[3] }}  <!-- description -->
 			</td>
 			<td>
-				{{ row[4] }}
+				{{ row[4] }}  <!-- completed -->
 			</td>
 			<td>                   
 				<div>
@@ -41,12 +41,12 @@
 	</table>
 <!-- form to add task -->
     <h3>Add a New Task</h3>
-    <form action="/add_list" class="form-inline" method="post">
+    <form action="/add_task" class="form-inline" method="post">
         <input name="user_id" type="hidden" value="{{ context.user_id }}">
-				<input name="list_id" type="hidden" value="{{ context.list_id }}">
-				<input name="data_id"	type="hidden" value="{{ context.dataType_id }}">
+		<input name="list_id" type="hidden" value="{{ context.list_id }}">
+		<input name="data_id" type="hidden" value="{{ context.dataType_id }}">
         <tr>
-            <th scope="row"><input class="form-control mr-2" name="task_name" placeholder="Task Name" type="text">
+            <th scope="row"><input class="form-control mr-2" name="task_type" placeholder="Task Type" type="text">
             </th>
             <td>
 				<input class="form-control mr-2" name="task_desc" placeholder="Description" type="text">

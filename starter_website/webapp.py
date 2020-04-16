@@ -48,7 +48,7 @@ def tasks(list_id):
 
     query = "SELECT `name`, `description` FROM lists WHERE `list_id` ='{}'".format(list_id)  # get name/desc of list
     rtn = execute_query(db_connection, query).fetchall()  # run query
-    context = {'list_name': rtn[0][0], 'list_desc': rtn[0][1]}
+    context = {'list_name': rtn[0][0], 'list_desc': rtn[0][1], 'list_id': list_id}
 
     query = "SELECT * FROM `tasks` WHERE `list_id` ='{}'".format(list_id)  # get info of tasks on list
     rtn = execute_query(db_connection, query).fetchall()  # run query
@@ -80,3 +80,17 @@ def delete_list(user_id, list_id):
     query = "DELETE FROM `lists` WHERE `list_id` = '{}'".format(list_id)
     execute_query(db_connection, query).fetchall()
     return redirect('/home/' + user_id)
+
+
+@webapp.route('/add_task', methods=['POST'])
+def add_task():
+    """
+    Route to execute query to add lists to db
+    """
+    db_connection = connect_to_database()
+    inputs = request.form.to_dict(flat=True)  # get form inputs from request
+
+    query = "INSERT INTO `tasks` (`list_id`, `dataType_id`, `description`, `completed`) VALUES ('{}', '{}', '{}', '{}')".format(inputs['list_id'], inputs['task_type'], inputs['task_desc'], inputs['task_comp'])
+    execute_query(db_connection, query).fetchall()  # execute query
+
+    return redirect("/tasks/" + inputs['list_id'])
