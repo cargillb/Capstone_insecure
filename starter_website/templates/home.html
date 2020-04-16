@@ -7,10 +7,10 @@
 <!-- main container -->
 <div class = "container my-3">
 
-	<h2> {{context.user_name }} To-Do Lists </h2>
+	<h2> {{ context.user_name }} To-Do Lists </h2>
 	
 	<table class="table">
-		<thead class=thead-light">
+		<thead class="thead-light">
 			<tr>
 				<th scope="col"> List Name</th>
 				<th scope="col"> Description</th>
@@ -19,19 +19,22 @@
 		{% for row in context.rows %}
 		<tr> 
 			<td>
-				<!-- This is where to add in <option></option> -->
+				{{ row[2] }}
 			</td>
 			<td>
-				<!-- This is where to add in <option></option> -->
+				{{ row[3] }}
 			</td>
+			
 			<td>                   
 				<div>
-					<button class="btn btn-outline-warning" onclick="delete_list">Delete</button>
-        </div>
+					<button class="btn btn-outline-warning" onclick="window.location.href = '/delete_list/{{ context.user_id }}/{{ row[0] }}'">Delete</button>
+        		</div>
 			</td>
 		</tr>
+		{% endfor %}
 		</tbody>
 	</table>
+	
 
 <!-- form to add list -->
     <h3>Add a New List</h3>
@@ -41,7 +44,7 @@
             <th scope="row"><input class="form-control mr-2" name="list_name" placeholder="List Name" type="text">
             </th>
             <td>
-								<input class="form-control mr-2" name="list_desc" placeholder="Description" type="text">
+				<input class="form-control mr-2" name="list_desc" placeholder="Description" type="text">
             </td>
             <td>
                 <button class="btn btn-outline-success" type="submit">Add List</button>
