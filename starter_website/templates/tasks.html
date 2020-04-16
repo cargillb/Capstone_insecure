@@ -17,7 +17,7 @@
 		{% for row in context.rows %}
 		<tr> 
 			<td>
-				{{ row[2] }}  <!-- dataType_id (Type of Task) -->
+				{{ row[2] }}  <!-- dataType_id (Type of Task)-->
 			</td>
 			<td>
 				{{ row[3] }}  <!-- description -->
@@ -32,7 +32,7 @@
 			</td>
 			<td>                   
 				<div>
-					<button class="btn btn-outline-warning" onclick="delete_task">Delete</button>
+					<button class="btn btn-outline-warning" onclick="window.location.href = '/delete_task/{{ context.list_id }}/{{ row[0] }}'">Delete</button>
         </div>
 			</td>
 		</tr>

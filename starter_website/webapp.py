@@ -85,7 +85,7 @@ def delete_list(user_id, list_id):
 @webapp.route('/add_task', methods=['POST'])
 def add_task():
     """
-    Route to execute query to add lists to db
+    Route to execute query to add task to db
     """
     db_connection = connect_to_database()
     inputs = request.form.to_dict(flat=True)  # get form inputs from request
@@ -94,3 +94,14 @@ def add_task():
     execute_query(db_connection, query).fetchall()  # execute query
 
     return redirect("/tasks/" + inputs['list_id'])
+
+
+@webapp.route('/delete_task/<list_id>/<task_id>')
+def delete_task(task_id, list_id):
+    """
+    Route to delete a task
+    """
+    db_connection = connect_to_database()
+    query = "DELETE FROM `tasks` WHERE `task_id` = '{}'".format(task_id)
+    execute_query(db_connection, query).fetchall()
+    return redirect('/tasks/' + list_id)
