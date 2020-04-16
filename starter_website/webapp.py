@@ -105,3 +105,23 @@ def delete_task(task_id, list_id):
     query = "DELETE FROM `tasks` WHERE `task_id` = '{}'".format(task_id)
     execute_query(db_connection, query).fetchall()
     return redirect('/tasks/' + list_id)
+
+
+@webapp.route('/update_task/<list_id>/<task_id>', methods=['POST', 'GET'])
+def update_task(list_id, task_id):
+    """
+    Display task update form and process any updates using the same function
+    """
+    db_connection = connect_to_database()
+
+    # display current data
+    if request.method == 'GET':
+        query = "SELECT * FROM `tasks` WHERE `task_id` ='{}'".format(task_id)  # get info of task
+        rtn = execute_query(db_connection, query).fetchall()  # run query
+        context = {'task_id': rtn[0][0], 'task_type': rtn[0][2], 'task_desc': rtn[0][3], 'task_comp': rtn[0][4], 'list_id': list_id}
+        return render_template('update_task.html', context=context)
+    elif request.method == 'POST':
+        query = "UPDATE `tasks` SET `dataType_id` = %s, `description` = %s, `completed` = %s WHERE `task_id` = %s"
+        data = (request.form['task_type'], request.form['task_desc'], request.form['task_comp'], task_id)
+        rtn = execute_query(db_connection, query, data)
+        return redirect('/tasks/' + list_id)

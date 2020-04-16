@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Update Task{% endblock %}
+{% block content %}
+<!-- main container -->
+<div class = "container my-3">
+	
+<!-- form to update task -->
+    <h3>Update Task</h3>
+    <form action="/update_task/{{ context.list_id }}/{{ context.task_id }}" class="form-inline" method="post">
+        <input name="task_id" type="hidden" value="{{ context.task_id }}">
+        <tr>
+            <th scope="row"><input class="form-control mr-2" name="task_type" value="{{ context.task_type }}" type="text">
+            </th>
+            <td>
+				<input class="form-control mr-2" name="task_desc" value="{{ context.task_desc }}" type="text">
+            </td>
+		    <td>
+				<input class="form-control mr-2" name="task_comp" value="{{ context.task_comp }}" type="text">
+            </td>
+            <td>
+                <button class="btn btn-outline-success" type="submit">Update Task</button>
+            </td>
+        </tr>
+    </form>
+
+</article>
+
+{% endblock %}
