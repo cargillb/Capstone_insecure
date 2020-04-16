@@ -18,7 +18,7 @@
 <header class="navbar bg-light">
 	<nav class="navbar navbar-light bg-light">
 		<a class="navbar-brand" href="{{ url_for('login') }}">
-			<img src="images/WhiteHat.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+			<img src="{{ url_for('.static', filename = 'WhiteHat.jpg') }}" width="60" height="30" class="d-inline-block align-top" alt="">
 			White Hat 
 		</a>
 	</nav>
