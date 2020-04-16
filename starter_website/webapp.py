@@ -79,9 +79,13 @@ def tasks(list_id):
     rtn = execute_query(db_connection, query).fetchall()  # run query
     context = {'list_name': rtn[0][0], 'list_desc': rtn[0][1], 'list_id': list_id}
 
-    query = "SELECT * FROM `tasks` WHERE `list_id` ='{}'".format(list_id)  # get info of tasks on list
+    query = "SELECT tasks.task_id, tasks.list_id, tasks.dataType_id, tasks.description, tasks.completed, dataTypes.name FROM `tasks` JOIN `dataTypes` ON tasks.dataType_id = dataTypes.dataType_id WHERE list_id = '{}'".format(list_id)  # get info of tasks on list
     rtn = execute_query(db_connection, query).fetchall()  # run query
     context['rows'] = rtn  # rtn = tasks data
+
+    query = "SELECT * from dataTypes" # get list of all types of tasks
+    rtn = execute_query(db_connection, query).fetchall()  # run query
+    context['taskTypes'] = rtn 
 
     return render_template('tasks.html', context=context)
 
@@ -123,6 +127,11 @@ def update_task(list_id, task_id):
         query = "SELECT * FROM `tasks` WHERE `task_id` ='{}'".format(task_id)  # get info of task
         rtn = execute_query(db_connection, query).fetchall()  # run query
         context = {'task_id': rtn[0][0], 'task_type': rtn[0][2], 'task_desc': rtn[0][3], 'task_comp': rtn[0][4], 'list_id': list_id}
+
+        query = "SELECT * from dataTypes" # get list of all types of tasks
+        rtn = execute_query(db_connection, query).fetchall()  # run query
+        context['taskTypes'] = rtn 
+
         return render_template('update_task.html', context=context)
     elif request.method == 'POST':
         query = "UPDATE `tasks` SET `dataType_id` = %s, `description` = %s, `completed` = %s WHERE `task_id` = %s"

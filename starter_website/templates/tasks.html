@@ -17,7 +17,7 @@
 		{% for row in context.rows %}
 		<tr> 
 			<td>
-				{{ row[2] }}  <!-- dataType_id (Type of Task)-->
+				{{ row[5] }}  <!-- dataType name -->
 			</td>
 			<td>
 				{{ row[3] }}  <!-- description -->
@@ -45,19 +45,27 @@
 	</table>
 <!-- form to add task -->
     <h3>Add a New Task</h3>
-    <form action="/add_task" class="form-inline" method="post">
+    <form action="/add_task" class="form-inline" method="post" id="tasksform">
         <input name="user_id" type="hidden" value="{{ context.user_id }}">
 		<input name="list_id" type="hidden" value="{{ context.list_id }}">
 		<input name="data_id" type="hidden" value="{{ context.dataType_id }}">
         <tr>
-            <th scope="row"><input class="form-control mr-2" name="task_type" placeholder="Task Type" type="text">
+            <th scope="row">
+				<select class="form-control" name="task_type" form="tasksform">
+					{% for taskType in context.taskTypes %}
+						<option value={{ taskType[0] }}>{{ taskType[1] }}</option>
+					{% endfor %}
+				</select>
             </th>
             <td>
 				<input class="form-control mr-2" name="task_desc" placeholder="Description" type="text">
             </td>
-		    <td>
-				<input class="form-control mr-2" name="task_comp" placeholder="No" type="text">
-            </td>
+			<td>
+				<select class="form-control" name="task_comp" form="tasksform">
+					<option value="0">Not Completed</option>
+					<option value="1">Completed</option>
+				</select>
+			</td>
             <td>
                 <button class="btn btn-outline-success" type="submit">Add Task</button>
             </td>
