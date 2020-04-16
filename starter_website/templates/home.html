@@ -7,7 +7,7 @@
 <!-- main container -->
 <div class = "container my-3">
 
-	<h2> {{ context.user_name }} To-Do Lists </h2>
+	<h2> {{ context.user_name }}'s To-Do Lists </h2>
 	
 	<table class="table">
 		<thead class="thead-light">
@@ -19,12 +19,16 @@
 		{% for row in context.rows %}
 		<tr> 
 			<td>
-				{{ row[2] }}
+				{{ row[2] }} <!-- List name -->
 			</td>
 			<td>
-				{{ row[3] }}
+				{{ row[3] }} <!-- List description -->
 			</td>
-			
+			<td>                   
+				<div>
+					<button class="btn btn-outline-primary" onclick="window.location.href = '/tasks/{{ row[0] }}'">View</button>
+        		</div>
+			</td>
 			<td>                   
 				<div>
 					<button class="btn btn-outline-warning" onclick="window.location.href = '/delete_list/{{ context.user_id }}/{{ row[0] }}'">Delete</button>

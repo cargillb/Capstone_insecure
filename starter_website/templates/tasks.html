@@ -23,17 +23,21 @@
 				{{ row[3] }}  <!-- description -->
 			</td>
 			<td>
-				{{ row[4] }}  <!-- completed -->
+				{% if row[4] == 0 %} <!-- row[4] = completed -->
+					No
+				{% else %}
+					Yes
+				{% endif %}
 			</td>
 			<td>                   
 				<div>
 					<button class="btn btn-outline-warning" onclick="window.location.href = '/update_task/{{ context.list_id }}/{{ row[0] }}'">Edit</button>
-        </div>
+       			</div>
 			</td>
 			<td>                   
 				<div>
 					<button class="btn btn-outline-warning" onclick="window.location.href = '/delete_task/{{ context.list_id }}/{{ row[0] }}'">Delete</button>
-        </div>
+        		</div>
 			</td>
 		</tr>
 		{% endfor %}
