@@ -34,6 +34,16 @@
  </form>
 </header>
 <!-- Child content -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 {% block content %}{% endblock %}
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS for bootstrap -->

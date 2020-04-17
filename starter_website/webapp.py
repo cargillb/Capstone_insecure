@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from db_connector.db_connector import connect_to_database, execute_query
 import sys  # to print to stderr
 #create the web application
 webapp = Flask(__name__)
+webapp.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 #webapp = Flask(__name__, static_url_path='/static')
 
 
@@ -10,15 +11,27 @@ webapp = Flask(__name__)
 @webapp.route('/')
 @webapp.route('/login', methods=['GET', 'POST'])
 def login():
-    #source: https://realpython.com/introduction-to-flask-part-2-creating-a-login-page/
-    error = None
+    if request.method == 'GET':
+        return render_template('login.html')
+
     if request.method == 'POST':
-        #Here we will want to check if there are matching username/password combos in the DB
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid credentials, please try again'
-        else:
-            return redirect(url_for('home'))
-    return render_template('login.html', error=error)
+        username = request.form['username']
+        password = request.form['password']
+
+        db_connection = connect_to_database()  # connect to db
+        query = "SELECT user_id, username, pword FROM users WHERE `username` ='{}'".format(username)
+        result = execute_query(db_connection, query).fetchall()  # run query
+
+        try:
+            if username == result[0][1] and password == result[0][2]:
+                print("login successful")
+                flash('You have been logged in!', 'success')
+                return redirect("/home/" + str(result[0][0]))
+
+        except:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+            return render_template('login.html')
+
 
 
 #-------------------------------- Home (List) Routes --------------------------------

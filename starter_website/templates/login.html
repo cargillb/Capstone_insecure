@@ -15,90 +15,103 @@
 
 <body>
 
-	<div class = "row justify-content-center">
-		<h2>White Hat Security Project</h2>
-	</div>
+<div class="row justify-content-center">
+    <h2>White Hat Security Project</h2>
+</div>
 <div class="container">
 
-	<div class="row justify-content-center">
-		<div class = "col justify-content-end my-2">
-			<img src = "http://clipart-library.com/images/6ir6KxKyT.jpg" alt="White Hat" class ="rounded mx-auto d-block" style="width: 15%;" />
-		</div>
+    <div class="row justify-content-center">
+        <div class="col justify-content-end my-2">
+            <img src="http://clipart-library.com/images/6ir6KxKyT.jpg" alt="White Hat" class="rounded mx-auto d-block"
+                 style="width: 15%;"/>
+        </div>
 
-	</div>
-	<div class = "row  mt-5">
-		<div class = "col-4 mt-2">
-			<div>
-				<h4><em>Toggle Vulnerabilities</em></h4>
-			</div>
-			<div class="custom-control custom-switch pt-4">
-				<input type="checkbox" class="custom-control-input" id="customSwitch1">
-				<label class="custom-control-label" for="customSwitch1">Example Switch</label>
-			</div>
-			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" id="customSwitch2">
-				<label class="custom-control-label" for="customSwitch2">Example Switch</label>
-			</div>
-			<div class="custom-control custom-switch">
-				<input type="checkbox" class="custom-control-input" id="customSwitch3">
-				<label class="custom-control-label" for="customSwitch3">Example Switch</label>
-			</div>
-		</div>
-		<div class = "col-8">
-		<!-- source: https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=simple-login-form-->
-			<div class="login-form">
-<!-- Remove commenting once it's linked into webapp.py			
-				{% if error %}
-					<p class = "error"> <strong>Error: </strong> {{ error }} </p>
-				{% endif %}
--->				
-				<form action="/examples/actions/confirmation.php" method="post">
-					<h2 class="text-center">Log in</h2>       
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Username" required="required">
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control" placeholder="Password" required="required">
-					</div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-primary btn-block">Log in</button>
-					</div>
-					<div class="mt-4">
-						<div class="d-flex justify-content-center links">
-							Don't have an account? <a href="#" class="ml-2">Sign Up</a>
-						</div>
-						<div class="d-flex justify-content-center links">
-							<a href="#">Forgot your password?</a>
-						</div>   
-						<div class="d-flex justify-content-center links mt-4">
-							<h5><strong>For Testing and Client use: </strong><a href="#">Login as guest</a></h5>
-						</div> 						
+    </div>
+    <div class="row  mt-5">
+        <div class="col-4 mt-2">
+            <div>
+                <h4><em>Toggle Vulnerabilities</em></h4>
+            </div>
+            <div class="custom-control custom-switch pt-4">
+                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                <label class="custom-control-label" for="customSwitch1">Example Switch</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                <label class="custom-control-label" for="customSwitch2">Example Switch</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitch3">
+                <label class="custom-control-label" for="customSwitch3">Example Switch</label>
+            </div>
+        </div>
+        <div class="col-8">
+            <!-- source: https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=simple-login-form-->
+            <div class="login-form">
 
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	
-	<div class = "row align-items-end">
-		<div class="d-flex justify-content-center links mt-4">
-			<h6>Directions for use: if we decide we need them</h6>
-		</div>   
-	</div>   
-	
 
-<!-- jQuery first, then Popper.js, then Bootstrap JS for bootstrap -->
-<script crossorigin="anonymous"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script crossorigin="anonymous"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script crossorigin="anonymous"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<!-- JavaScript for the webapp -->
-<script src="{{ url_for('.static', filename = 'pjt_scripts.js') }}" type="text/javascript"></script> <!-- Our sripts -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% if error %}
+                    <p class="error"><strong>Error:</strong> {{ error }}
+                {% endif %}
+
+                <form action="/login" method="post">
+                    <h2 class="text-center">Log in</h2>
+                    <div class="form-group">
+                        <input type="text" name="username" class="form-control" placeholder="Username" required="required">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required="required">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                    </div>
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-center links">
+                            Don't have an account? <a href="#" class="ml-2">Sign Up</a>
+                        </div>
+                        <div class="d-flex justify-content-center links">
+                            <a href="#">Forgot your password?</a>
+                        </div>
+                        <div class="d-flex justify-content-center links mt-4">
+                            <h5><strong>For Testing and Client use: </strong><a href="#">Login as guest</a></h5>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-end">
+        <div class="d-flex justify-content-center links mt-4">
+            <h6>Directions for use: if we decide we need them</h6>
+        </div>
+    </div>
+</div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS for bootstrap -->
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- JavaScript for the webapp -->
+    <script src="{{ url_for('.static', filename = 'pjt_scripts.js') }}" type="text/javascript"></script>
+    <!-- Our sripts -->
 </body>
 </html>                                		                            
 
