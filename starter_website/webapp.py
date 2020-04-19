@@ -1,13 +1,56 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from db_connector.db_connector import connect_to_database, execute_query
+from flask_login import LoginManager, login_user, login_required, current_user,logout_user, UserMixin
+
 import sys  # to print to stderr
+
+
+
 #create the web application
 webapp = Flask(__name__)
-webapp.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 #webapp = Flask(__name__, static_url_path='/static')
+webapp.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
+# flask-login
+'''
+    Logged-in user parameters are accessible using current_user.[parameter]
+    
+    current_user.id
+    current_user.username
+    current_user.password
+    current_user.email
+    
+'''
+
+login_manager = LoginManager()
+login_manager.init_app(webapp)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_connection = connect_to_database()  # connect to db
+    query = "SELECT * FROM users WHERE `user_id` ='{}'".format(user_id)
+    result = execute_query(db_connection, query).fetchall()  # run query
+    id = result[0][0]
+    username = result[0][1]
+    password = result[0][2]
+    email = result[0][3]
+    user = User(id, username, password, email)
+    return user
+
+class User(UserMixin):
+    def __init__(self, user_id, username, password, email):
+
+        self.id = user_id
+        self.username = username
+        self.password = password
+        self.email = email
 
 
 #-------------------------------- Login Routes --------------------------------
+
+
 @webapp.route('/')
 @webapp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -19,35 +62,45 @@ def login():
         password = request.form['password']
 
         db_connection = connect_to_database()  # connect to db
-        query = "SELECT user_id, username, pword FROM users WHERE `username` ='{}'".format(username)
+        query = "SELECT * FROM users WHERE `username` ='{}'".format(username)
         result = execute_query(db_connection, query).fetchall()  # run query
-
-        try:
+        if result:
             if username == result[0][1] and password == result[0][2]:
+                user = User(user_id=result[0][0], username=result[0][1], password=result[0][2], email=result[0][3])
+                login_user(user)
+                print(result)
                 print("login successful")
                 flash('You have been logged in!', 'success')
-                return redirect("/home/" + str(result[0][0]))
+                return redirect(url_for('home'))
 
-        except:
-            flash('Login Unsuccessful. Please check username and password', 'danger')
-            return render_template('login.html')
+        flash('Login Unsuccessful. Please check username and password', 'danger')
+        return render_template('login.html')
 
+
+@webapp.route('/logout')
+def logout():
+    logout_user()
+    flash('You have been logged out', 'info')
+    return redirect(url_for('login'))
 
 
 #-------------------------------- Home (List) Routes --------------------------------
-@webapp.route('/home/<user_id>')
-def home(user_id):
+@webapp.route('/home')
+@login_required
+def home():
     """
     Route for the home page of a user where all of their to-do lists will be listed
     """
     context = {}  # create context dictionary
     db_connection = connect_to_database()  # connect to db
 
-    query = "SELECT `username` FROM users WHERE `user_id` ='{}'".format(user_id)  # get username
+    # query = "SELECT `username` FROM users WHERE `user_id` ='{}'".format(user_id)  # get username
+    query = "SELECT `username` FROM users WHERE `user_id` ='{}'".format(current_user.id)  # get username
     rtn = execute_query(db_connection, query).fetchall()  # run query
-    context = {'user_name': rtn[0][0], 'user_id': user_id}
+    # context = {'user_name': rtn[0][0], 'user_id': user_id}
+    context = {'user_name': rtn[0][0], 'user_id': current_user.id}
 
-    query = "SELECT * FROM `lists` WHERE `user_id` ='{}'".format(user_id)  # get list info for a user
+    query = "SELECT * FROM `lists` WHERE `user_id` ='{}'".format(current_user.id)  # get list info for a user
     rtn = execute_query(db_connection, query).fetchall()  # run query
     context['rows'] = rtn  # rtn = list data
 
@@ -55,6 +108,7 @@ def home(user_id):
 
 
 @webapp.route('/add_list', methods=['POST'])
+@login_required
 def add_list():
     """
     Route to execute query to add lists to db
@@ -69,6 +123,7 @@ def add_list():
 
 
 @webapp.route('/delete_list/<user_id>/<list_id>')
+@login_required
 def delete_list(user_id, list_id):
     """
     Route to delete a list
