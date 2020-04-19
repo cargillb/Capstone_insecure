@@ -7,7 +7,8 @@
 <!-- main container -->
 <div class = "container my-3">
 
-	<h2> {{ context.user_name }}'s To-Do Lists </h2>
+{#	<h2> {{ context.user_name }}'s To-Do Lists </h2>#}
+	<h2> {{ current_user.username }}'s To-Do Lists </h2>
 
 	<table class="table">
 		<thead class="thead-light">

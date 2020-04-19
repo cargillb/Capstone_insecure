@@ -54,6 +54,10 @@ class User(UserMixin):
 @webapp.route('/')
 @webapp.route('/login', methods=['GET', 'POST'])
 def login():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
     if request.method == 'GET':
         return render_template('login.html')
 
@@ -82,6 +86,38 @@ def logout():
     logout_user()
     flash('You have successfully logged out', 'info')
     return redirect(url_for('login'))
+
+
+@webapp.route("/register", methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    if request.method == 'GET':
+        return render_template('accountCreation.html')
+
+    if request.method == 'POST':
+
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        print(email, username, password, confirm_password)
+        if password != confirm_password:
+            flash('Password confirmation does not match password', 'danger')
+            return render_template('accountCreation.html')
+
+        db_connection = connect_to_database()
+        query = ('INSERT INTO `users` '
+                 '(`user_id`, `username`, `pword`, `email`) '
+                 'VALUES (NULL, %s, %s, %s);')
+        data = (username, password, email)
+        execute_query(db_connection, query, data)
+
+        flash('Your account has been created. You may now log in.', 'success')
+        return redirect(url_for('login'))
+
 
 
 #-------------------------------- Home (List) Routes --------------------------------
