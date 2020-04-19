@@ -80,7 +80,7 @@ def login():
 @webapp.route('/logout')
 def logout():
     logout_user()
-    flash('You have been logged out', 'info')
+    flash('You have successfully logged out', 'info')
     return redirect(url_for('login'))
 
 
