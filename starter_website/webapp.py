@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from db_connector.db_connector import connect_to_database, execute_query
-from flask_login import LoginManager, login_user, login_required, current_user,logout_user, UserMixin
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
 
 import sys  # to print to stderr
 
@@ -22,7 +22,6 @@ webapp.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     current_user.email
     current_user.list_id
     current_user.task_id
-    
 '''
 
 login_manager = LoginManager()
@@ -74,11 +73,8 @@ def login():
             if username == result[0][1] and password == result[0][2]:
                 user = User(user_id=result[0][0], username=result[0][1], password=result[0][2], email=result[0][3])
                 login_user(user)
-                # print(result)
-                # print("login successful")
                 flash('You have been logged in!', 'success')
                 next_page = request.args.get('next')
-                # return redirect(next_page) if next_page else redirect(url_for('home'))
                 return redirect(url_for('home'))
 
         flash('Login Unsuccessful. Please check username and password', 'danger')
@@ -107,7 +103,6 @@ def register():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
-        # print(email, username, password, confirm_password)
         if password != confirm_password:
             flash('Password confirmation does not match password', 'danger')
             return render_template('accountCreation.html')
@@ -133,10 +128,8 @@ def home():
     context = {}  # create context dictionary
     db_connection = connect_to_database()  # connect to db
 
-    # query = "SELECT `username` FROM users WHERE `user_id` ='{}'".format(user_id)  # get username
     query = "SELECT `username` FROM users WHERE `user_id` ='{}'".format(current_user.id)  # get username
     rtn = execute_query(db_connection, query).fetchall()  # run query
-    # context = {'user_name': rtn[0][0], 'user_id': user_id}
     context = {'user_name': rtn[0][0], 'user_id': current_user.id}
 
     query = "SELECT * FROM `lists` WHERE `user_id` ='{}'".format(current_user.id)  # get list info for a user
@@ -157,7 +150,6 @@ def add_list():
 
     query = "INSERT INTO `lists` (`user_id`, `name`, `description`) VALUES ('{}', \"{}\", \"{}\")".format(inputs['user_id'], inputs['list_name'], inputs['list_desc'])
     execute_query(db_connection, query) # execute query
-    # execute_query(db_connection, query).fetchall()  # execute query
 
     return redirect(url_for('home'))
 
@@ -170,10 +162,29 @@ def delete_list(list_id):
     """
     db_connection = connect_to_database()
     query = "DELETE FROM `lists` WHERE `list_id` = '{}'".format(list_id)
-    # execute_query(db_connection, query).fetchall()
     execute_query(db_connection, query)
     flash('The list has been deleted.', 'info')
     return redirect(url_for('home'))
+
+
+@webapp.route('/update_list/<list_id>', methods=['POST', 'GET'])
+def update_list(list_id):
+    """
+    Display list update form and process any updates using the same function
+    """
+    db_connection = connect_to_database()
+
+    # display current data
+    if request.method == 'GET':
+        query = "SELECT * FROM `lists` WHERE `list_id` ='{}'".format(list_id)  # get info of list
+        rtn = execute_query(db_connection, query).fetchall()  # run query
+        context = {'list_id': rtn[0][0], 'list_name': rtn[0][2], 'list_desc': rtn[0][3]}
+        return render_template('update_list.html', context=context)
+    elif request.method == 'POST':
+        query = "UPDATE `lists` SET `name` = %s, `description` = %s WHERE `list_id` = %s"
+        data = (request.form['list_name'], request.form['list_desc'], list_id)
+        rtn = execute_query(db_connection, query, data)
+        return redirect('/home')
 
 
 #-------------------------------- Task Routes --------------------------------
