@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from db_connector.db_connector import connect_to_database, execute_query
-from flask_login import LoginManager, login_user, login_required, current_user,logout_user, UserMixin
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
 
 import sys  # to print to stderr
 
@@ -20,11 +20,13 @@ webapp.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     current_user.username
     current_user.password
     current_user.email
-    
+    current_user.list_id
+    current_user.task_id
 '''
 
 login_manager = LoginManager()
 login_manager.init_app(webapp)
+login_manager.login_view = '/login'
 
 
 @login_manager.user_loader
@@ -46,15 +48,14 @@ class User(UserMixin):
         self.username = username
         self.password = password
         self.email = email
+        self.list_id = None
+        self.task_id = None
 
 
 #-------------------------------- Login Routes --------------------------------
-
-
 @webapp.route('/')
 @webapp.route('/login', methods=['GET', 'POST'])
 def login():
-
     if current_user.is_authenticated:
         return redirect(url_for('home'))
 
@@ -72,9 +73,8 @@ def login():
             if username == result[0][1] and password == result[0][2]:
                 user = User(user_id=result[0][0], username=result[0][1], password=result[0][2], email=result[0][3])
                 login_user(user)
-                print(result)
-                print("login successful")
                 flash('You have been logged in!', 'success')
+                next_page = request.args.get('next')
                 return redirect(url_for('home'))
 
         flash('Login Unsuccessful. Please check username and password', 'danger')
@@ -103,12 +103,26 @@ def register():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
-        print(email, username, password, confirm_password)
         if password != confirm_password:
             flash('Password confirmation does not match password', 'danger')
             return render_template('accountCreation.html')
 
         db_connection = connect_to_database()
+
+        # make sure username is unique
+        query = 'SELECT `username` FROM users'
+        rtn = execute_query(db_connection, query).fetchall()  # run query
+        if (any(username in i for i in rtn)):
+            flash('Username already taken, please try again', 'danger')
+            return render_template('accountCreation.html')
+
+        # make sure email is unique
+        query = 'SELECT `email` FROM users'
+        rtn = execute_query(db_connection, query).fetchall()  # run query
+        if (any(email in i for i in rtn)):
+            flash('Email already registered, please try again', 'danger')
+            return render_template('accountCreation.html')
+
         query = ('INSERT INTO `users` '
                  '(`user_id`, `username`, `pword`, `email`) '
                  'VALUES (NULL, %s, %s, %s);')
@@ -117,7 +131,6 @@ def register():
 
         flash('Your account has been created. You may now log in.', 'success')
         return redirect(url_for('login'))
-
 
 
 #-------------------------------- Home (List) Routes --------------------------------
@@ -130,10 +143,8 @@ def home():
     context = {}  # create context dictionary
     db_connection = connect_to_database()  # connect to db
 
-    # query = "SELECT `username` FROM users WHERE `user_id` ='{}'".format(user_id)  # get username
     query = "SELECT `username` FROM users WHERE `user_id` ='{}'".format(current_user.id)  # get username
     rtn = execute_query(db_connection, query).fetchall()  # run query
-    # context = {'user_name': rtn[0][0], 'user_id': user_id}
     context = {'user_name': rtn[0][0], 'user_id': current_user.id}
 
     query = "SELECT * FROM `lists` WHERE `user_id` ='{}'".format(current_user.id)  # get list info for a user
@@ -144,7 +155,7 @@ def home():
 
 
 @webapp.route('/add_list', methods=['POST'])
-@login_required
+# @login_required
 def add_list():
     """
     Route to execute query to add lists to db
@@ -153,21 +164,42 @@ def add_list():
     inputs = request.form.to_dict(flat=True)  # get form inputs from request
 
     query = "INSERT INTO `lists` (`user_id`, `name`, `description`) VALUES ('{}', \"{}\", \"{}\")".format(inputs['user_id'], inputs['list_name'], inputs['list_desc'])
-    execute_query(db_connection, query).fetchall()  # execute query
+    execute_query(db_connection, query) # execute query
 
-    return redirect("/home/" + inputs['user_id'])
+    return redirect(url_for('home'))
 
 
-@webapp.route('/delete_list/<user_id>/<list_id>')
-@login_required
-def delete_list(user_id, list_id):
+@webapp.route('/delete_list/<list_id>')
+# @login_required
+def delete_list(list_id):
     """
     Route to delete a list
     """
     db_connection = connect_to_database()
     query = "DELETE FROM `lists` WHERE `list_id` = '{}'".format(list_id)
-    execute_query(db_connection, query).fetchall()
-    return redirect('/home/' + user_id)
+    execute_query(db_connection, query)
+    flash('The list has been deleted.', 'info')
+    return redirect(url_for('home'))
+
+
+@webapp.route('/update_list/<list_id>', methods=['POST', 'GET'])
+def update_list(list_id):
+    """
+    Display list update form and process any updates using the same function
+    """
+    db_connection = connect_to_database()
+
+    # display current data
+    if request.method == 'GET':
+        query = "SELECT * FROM `lists` WHERE `list_id` ='{}'".format(list_id)  # get info of list
+        rtn = execute_query(db_connection, query).fetchall()  # run query
+        context = {'list_id': rtn[0][0], 'list_name': rtn[0][2], 'list_desc': rtn[0][3]}
+        return render_template('update_list.html', context=context)
+    elif request.method == 'POST':
+        query = "UPDATE `lists` SET `name` = %s, `description` = %s WHERE `list_id` = %s"
+        data = (request.form['list_name'], request.form['list_desc'], list_id)
+        rtn = execute_query(db_connection, query, data)
+        return redirect('/home')
 
 
 #-------------------------------- Task Routes --------------------------------
@@ -176,10 +208,18 @@ def tasks(list_id):
     """
     Route for the tasks page of a user's list where all of the tasks of a to do list are shown
     """
-    context = {}  # create context dictionary
     db_connection = connect_to_database()  # connect to db
 
-    query = "SELECT `name`, `description` FROM lists WHERE `list_id` ='{}'".format(list_id)  # get name/desc of list
+    # check if requested list belongs to the user
+    query = "SELECT `user_id` FROM lists WHERE `list_id` = '{}'".format(list_id)
+    rtn = execute_query(db_connection, query).fetchall()
+    if rtn[0][0] != current_user.id:
+        print(rtn)
+        return redirect(url_for('invalid_access'))
+
+    context = {}  # create context dictionary
+
+    query = "SELECT `name`, `description` FROM lists WHERE `list_id` = '{}'".format(list_id)  # get name/desc of list
     rtn = execute_query(db_connection, query).fetchall()  # run query
     context = {'list_name': rtn[0][0], 'list_desc': rtn[0][1], 'list_id': list_id}
 
@@ -192,6 +232,15 @@ def tasks(list_id):
     context['taskTypes'] = rtn 
 
     return render_template('tasks.html', context=context)
+
+
+@webapp.route('/invalid_access')
+# @login_required
+def invalid_access():
+    """
+    Route if a user tries to access another users list of tasks
+    """
+    return render_template('invalid_access.html', context = None)
 
 
 @webapp.route('/add_task', methods=['POST'])
