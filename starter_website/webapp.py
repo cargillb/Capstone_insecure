@@ -20,11 +20,14 @@ webapp.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     current_user.username
     current_user.password
     current_user.email
+    current_user.list_id
+    current_user.task_id
     
 '''
 
 login_manager = LoginManager()
 login_manager.init_app(webapp)
+login_manager.login_view = '/login'
 
 
 @login_manager.user_loader
@@ -46,6 +49,8 @@ class User(UserMixin):
         self.username = username
         self.password = password
         self.email = email
+        self.list_id = None
+        self.task_id = None
 
 
 #-------------------------------- Login Routes --------------------------------
@@ -72,9 +77,11 @@ def login():
             if username == result[0][1] and password == result[0][2]:
                 user = User(user_id=result[0][0], username=result[0][1], password=result[0][2], email=result[0][3])
                 login_user(user)
-                print(result)
-                print("login successful")
+                # print(result)
+                # print("login successful")
                 flash('You have been logged in!', 'success')
+                next_page = request.args.get('next')
+                # return redirect(next_page) if next_page else redirect(url_for('home'))
                 return redirect(url_for('home'))
 
         flash('Login Unsuccessful. Please check username and password', 'danger')
@@ -103,7 +110,7 @@ def register():
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
-        print(email, username, password, confirm_password)
+        # print(email, username, password, confirm_password)
         if password != confirm_password:
             flash('Password confirmation does not match password', 'danger')
             return render_template('accountCreation.html')
@@ -144,7 +151,7 @@ def home():
 
 
 @webapp.route('/add_list', methods=['POST'])
-@login_required
+# @login_required
 def add_list():
     """
     Route to execute query to add lists to db
@@ -153,21 +160,24 @@ def add_list():
     inputs = request.form.to_dict(flat=True)  # get form inputs from request
 
     query = "INSERT INTO `lists` (`user_id`, `name`, `description`) VALUES ('{}', \"{}\", \"{}\")".format(inputs['user_id'], inputs['list_name'], inputs['list_desc'])
-    execute_query(db_connection, query).fetchall()  # execute query
+    execute_query(db_connection, query) # execute query
+    # execute_query(db_connection, query).fetchall()  # execute query
 
-    return redirect("/home/" + inputs['user_id'])
+    return redirect(url_for('home'))
 
 
-@webapp.route('/delete_list/<user_id>/<list_id>')
-@login_required
-def delete_list(user_id, list_id):
+@webapp.route('/delete_list/<list_id>')
+# @login_required
+def delete_list(list_id):
     """
     Route to delete a list
     """
     db_connection = connect_to_database()
     query = "DELETE FROM `lists` WHERE `list_id` = '{}'".format(list_id)
-    execute_query(db_connection, query).fetchall()
-    return redirect('/home/' + user_id)
+    # execute_query(db_connection, query).fetchall()
+    execute_query(db_connection, query)
+    flash('The list has been deleted.', 'info')
+    return redirect(url_for('home'))
 
 
 #-------------------------------- Task Routes --------------------------------
