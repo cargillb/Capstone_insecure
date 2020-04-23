@@ -20,7 +20,6 @@ webapp.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     current_user.username
     current_user.password
     current_user.email
-    
 '''
 
 login_manager = LoginManager()
@@ -49,12 +48,9 @@ class User(UserMixin):
 
 
 #-------------------------------- Login Routes --------------------------------
-
-
 @webapp.route('/')
 @webapp.route('/login', methods=['GET', 'POST'])
 def login():
-
     if current_user.is_authenticated:
         return redirect(url_for('home'))
 
@@ -117,7 +113,6 @@ def register():
 
         flash('Your account has been created. You may now log in.', 'success')
         return redirect(url_for('login'))
-
 
 
 #-------------------------------- Home (List) Routes --------------------------------
