@@ -2,6 +2,7 @@ webapp.py
 
 line 61, GET: There as a protection against user changing URL?
 
+------------------
 
 https://cwatch.comodo.com/check-my-website-security.php
 Tautology based injection:
@@ -13,6 +14,7 @@ query = " SELECT id FROM users WHERE username'" + username + "' AND password='" 
 Test injection by trying to login with a known username ("username") 
 and password to "' OR 1=1
 
+-------------------
 
 Blind injection:
 Create an account and login, once you are on the home page, create a list and 
@@ -25,3 +27,16 @@ change tasks/2 in the url to tasks/3
 	
 Created account "Banks", "OregonState". Created list, then was able to change "tasks/41"
 to "tasks/2", "3", "40" and see other lists
+
+------------------
+
+Not confirmed but I believe we can modify the add_list query from within the 
+add a new list option for each user. We would need to remove the breaks "\" in the query
+in webapp.py
+
+Potential injection:
+list name: SQLInjection
+description: queryManipulation"; SET FOREIGN_KEY_CHECKS = 0; Drop Table Tasks;
+
+Currently looking into how I can retrieve the DB name. If we can get it, 
+we could drop the entire database.
