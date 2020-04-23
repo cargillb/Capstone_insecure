@@ -108,6 +108,21 @@ def register():
             return render_template('accountCreation.html')
 
         db_connection = connect_to_database()
+
+        # make sure username is unique
+        query = 'SELECT `username` FROM users'
+        rtn = execute_query(db_connection, query).fetchall()  # run query
+        if (any(username in i for i in rtn)):
+            flash('Username already taken, please try again', 'danger')
+            return render_template('accountCreation.html')
+
+        # make sure email is unique
+        query = 'SELECT `email` FROM users'
+        rtn = execute_query(db_connection, query).fetchall()  # run query
+        if (any(email in i for i in rtn)):
+            flash('Email already registered, please try again', 'danger')
+            return render_template('accountCreation.html')
+
         query = ('INSERT INTO `users` '
                  '(`user_id`, `username`, `pword`, `email`) '
                  'VALUES (NULL, %s, %s, %s);')
