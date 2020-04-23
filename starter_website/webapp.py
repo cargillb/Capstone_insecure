@@ -208,10 +208,18 @@ def tasks(list_id):
     """
     Route for the tasks page of a user's list where all of the tasks of a to do list are shown
     """
-    context = {}  # create context dictionary
     db_connection = connect_to_database()  # connect to db
 
-    query = "SELECT `name`, `description` FROM lists WHERE `list_id` ='{}'".format(list_id)  # get name/desc of list
+    # check if requested list belongs to the user
+    query = "SELECT `user_id` FROM lists WHERE `list_id` = '{}'".format(list_id)
+    rtn = execute_query(db_connection, query).fetchall()
+    if rtn[0][0] != current_user.id:
+        print(rtn)
+        return redirect(url_for('invalid_access'))
+
+    context = {}  # create context dictionary
+
+    query = "SELECT `name`, `description` FROM lists WHERE `list_id` = '{}'".format(list_id)  # get name/desc of list
     rtn = execute_query(db_connection, query).fetchall()  # run query
     context = {'list_name': rtn[0][0], 'list_desc': rtn[0][1], 'list_id': list_id}
 
@@ -224,6 +232,15 @@ def tasks(list_id):
     context['taskTypes'] = rtn 
 
     return render_template('tasks.html', context=context)
+
+
+@webapp.route('/invalid_access')
+# @login_required
+def invalid_access():
+    """
+    Route if a user tries to access another users list of tasks
+    """
+    return render_template('invalid_access.html', context = None)
 
 
 @webapp.route('/add_task', methods=['POST'])
