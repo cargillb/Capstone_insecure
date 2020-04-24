@@ -1,7 +1,3 @@
-webapp.py
-
-line 61, GET: There as a protection against user changing URL?
-
 ------------------
 
 https://cwatch.comodo.com/check-my-website-security.php
@@ -40,3 +36,4 @@ description: queryManipulation"; SET FOREIGN_KEY_CHECKS = 0; Drop Table Tasks;
 
 Currently looking into how I can retrieve the DB name. If we can get it, 
 we could drop the entire database.
+
