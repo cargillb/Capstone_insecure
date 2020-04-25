@@ -23,13 +23,7 @@
 		</a>
 	</nav>
 		<form class="form-inline">
-			<select class="custom-select" id="header_select" style="min-width:200px">
-					<option disabled hidden selected value="-99">Select a List</option>
-						{% for i in context.list_lists %}
-						<option value="{{ i[0] }}">{{ i[1] }}</option>
-            {% endfor %}
-        </select>
-        <button class="btn btn-outline-primary m-1" onclick="view_list()" type="button">View</button>
+			
         <a class="btn btn-outline-danger" href="{{ url_for('logout') }}" role="button">Logout</a>
  </form>
 </header>
