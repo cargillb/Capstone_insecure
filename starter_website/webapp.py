@@ -72,10 +72,10 @@ def login():
         query = "SELECT * FROM users WHERE `username`='{}' AND pword='{}'".format(username, password)
         # query above is equivalient to: query = "SELECT * FROM users WHERE username= '" + username + "' AND pword = '"+password+"'"
 
-        #username = doesntmatter
-        #password = doesntmatter'OR user_id='1
-        #tautalogy: password = blah' OR user_id like '%%
-        print(query)
+        #Blind insertion: username = doesntmatter
+            #password = doesntmatter'OR user_id='1
+        #tautalogy:username = doesntmatter  password = blah' OR user_id like '%%
+        
         result = execute_query(db_connection, query).fetchall()  # run query
         if result:
             #removed validation of user entry to allow for SQL injection
