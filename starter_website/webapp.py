@@ -15,7 +15,7 @@ webapp.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 # flask-login
 '''
     Logged-in user parameters are accessible using current_user.[parameter]
-    
+
     current_user.id
     current_user.username
     current_user.password
@@ -66,19 +66,32 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        db_connection = connect_to_database()  # connect to db
-        query = "SELECT * FROM users WHERE `username` ='{}'".format(username)
+        '''jh;lkj;ljk;lkjio'''
+        """jh;lkj;ljk;lkjio"""
+        db_connection = connect_to_database() # connect to db
+        #old query (more secure)
+        #query = "SELECT * FROM users WHERE `username` ='{}'".format(username)
+
+        query = "SELECT * FROM users WHERE `username`='{}' AND pword='{}'".format(username, password)
+        # query above is equivalient to: query = "SELECT * FROM users WHERE username= '" + username + "' AND pword = '"+password+"'"
+
+        #username = doesntmatter
+        #password = doesntmatter'OR user_id='1
+        #tautalogy: password = blah' OR user_id like '%%
+        print(query)
         result = execute_query(db_connection, query).fetchall()  # run query
         if result:
-            if username == result[0][1] and password == result[0][2]:
-                user = User(user_id=result[0][0], username=result[0][1], password=result[0][2], email=result[0][3])
-                login_user(user)
-                flash('You have been logged in!', 'success')
-                next_page = request.args.get('next')
-                return redirect(url_for('home'))
+            #removed validation of user entry to allow for SQL injection
+            #if username == result[0][1] and password == result[0][2]:
+            user = User(user_id=result[0][0], username=result[0][1], password=result[0][2], email=result[0][3])
+            login_user(user)
+            flash('You have been logged in!', 'success')
+            next_page = request.args.get('next')
+            return redirect(url_for('home'))
 
         flash('Login Unsuccessful. Please check username and password', 'danger')
         return render_template('login.html')
+
 
 
 @webapp.route('/logout')
@@ -229,7 +242,7 @@ def tasks(list_id):
 
     query = "SELECT * from dataTypes" # get list of all types of tasks
     rtn = execute_query(db_connection, query).fetchall()  # run query
-    context['taskTypes'] = rtn 
+    context['taskTypes'] = rtn
 
     return render_template('tasks.html', context=context)
 
@@ -283,7 +296,7 @@ def update_task(list_id, task_id):
 
         query = "SELECT * from dataTypes" # get list of all types of tasks
         rtn = execute_query(db_connection, query).fetchall()  # run query
-        context['taskTypes'] = rtn 
+        context['taskTypes'] = rtn
 
         return render_template('update_task.html', context=context)
     elif request.method == 'POST':
