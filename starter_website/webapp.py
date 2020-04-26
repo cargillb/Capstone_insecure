@@ -75,7 +75,7 @@ def login():
         #Blind insertion: username = doesntmatter
             #password = doesntmatter'OR user_id='1
         #tautalogy:username = doesntmatter  password = blah' OR user_id like '%%
-        
+
         result = execute_query(db_connection, query).fetchall()  # run query
         if result:
             #removed validation of user entry to allow for SQL injection
@@ -89,6 +89,13 @@ def login():
         flash('Login Unsuccessful. Please check username and password', 'danger')
         return render_template('login.html')
 
+@webapp.route('/reset_database', methods=['POST'])
+def reset_database():
+    db_connection = connect_to_database()
+    query = "CALL reset_database()"
+    execute_query(db_connection, query)
+    flash('Reset database was successful', 'success')
+    return render_template('login.html')
 
 
 @webapp.route('/logout')
@@ -173,7 +180,7 @@ def add_list():
     db_connection = connect_to_database()
     inputs = request.form.to_dict(flat=True)  # get form inputs from request
 
-    query = "INSERT INTO `lists` (`user_id`, `name`, `description`) VALUES ('{}', \"{}\", \"{}\")".format(inputs['user_id'], inputs['list_name'], inputs['list_desc'])
+    query = "INSERT INTO `lists` (`user_id`, `name`, `description`) VALUES ('{}', '{}', '{}')".format(inputs['user_id'], inputs['list_name'], inputs['list_desc']);
     execute_query(db_connection, query) # execute query
 
     return redirect(url_for('home'))
