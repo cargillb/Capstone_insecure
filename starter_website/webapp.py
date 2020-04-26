@@ -51,7 +51,6 @@ class User(UserMixin):
         self.list_id = None
         self.task_id = None
 
-
 #-------------------------------- Login Routes --------------------------------
 @webapp.route('/')
 @webapp.route('/login', methods=['GET', 'POST'])
@@ -66,8 +65,6 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        '''jh;lkj;ljk;lkjio'''
-        """jh;lkj;ljk;lkjio"""
         db_connection = connect_to_database() # connect to db
         #old query (more secure)
         #query = "SELECT * FROM users WHERE `username` ='{}'".format(username)
