@@ -239,13 +239,7 @@ def tasks(list_id):
     """
     db_connection = connect_to_database()  # connect to db
 
-    # check if requested list belongs to the user
-    query = "SELECT `user_id` FROM lists WHERE `list_id` = '{}'".format(list_id)
-    rtn = execute_query(db_connection, query).fetchall()
-    if rtn[0][0] != current_user.id:
-        print(rtn)
-        db_connection.close() # close connection before returning
-        return redirect(url_for('invalid_access'))
+    # this is where we SHOULD check if requested list belongs to the user
 
     context = {}  # create context dictionary
 
@@ -253,7 +247,7 @@ def tasks(list_id):
     rtn = execute_query(db_connection, query).fetchall()  # run query
     context = {'list_name': rtn[0][0], 'list_desc': rtn[0][1], 'list_id': list_id}
 
-    query = "SELECT tasks.task_id, tasks.list_id, tasks.dataType_id, tasks.description, tasks.completed, dataTypes.name FROM `tasks` JOIN `dataTypes` ON tasks.dataType_id = dataTypes.dataType_id WHERE list_id = '{}'".format(list_id)  # get info of tasks on list
+    query = "SELECT tasks.task_id, tasks.list_id, tasks.dataType_id, tasks.description, tasks.completed, dataTypes.name FROM `tasks` JOIN `dataTypes` ON tasks.dataType_id = dataTypes.dataType_id WHERE list_id = {}".format(list_id)  # get info of tasks on list
     rtn = execute_query(db_connection, query).fetchall()  # run query
     context['rows'] = rtn  # rtn = tasks data
 
@@ -282,7 +276,7 @@ def add_task():
     db_connection = connect_to_database()
     inputs = request.form.to_dict(flat=True)  # get form inputs from request
 
-    query = "INSERT INTO `tasks` (`list_id`, `dataType_id`, `description`, `completed`) VALUES ('{}', '{}', \"{}\", '{}')".format(inputs['list_id'], inputs['task_type'], inputs['task_desc'], inputs['task_comp'])
+    query = "INSERT INTO `tasks` (`list_id`, `dataType_id`, `description`, `completed`) VALUES ('{}', '{}', '{}', '{}')".format(inputs['list_id'], inputs['task_type'], inputs['task_desc'], inputs['task_comp'])
     execute_query(db_connection, query).fetchall()  # execute query
 
     db_connection.close() # close connection before returning
