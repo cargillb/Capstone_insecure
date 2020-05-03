@@ -3,6 +3,13 @@
 {% block content %}
 <!-- main container -->
 <div class = "container my-3">
+	<div class="row">
+		<form action="/reset_database/home" method="POST">
+			<div class="form-group">
+				<button type="submit" class="btn btn-warning btn-lg">Reset Database for Testing</button>
+			</div>
+		</form>
+	</div>
 	<h2> {{context.list_name }} </h2>
 	<blockquote class="blockquote">{{ context.list_desc }}</blockquote>
 	<table class="table">
@@ -17,7 +24,7 @@
 		</thead>
 		<tbody>
 		{% for row in context.rows %}
-		<tr> 
+		<tr>
 			<td>
 				{{ row[5] }}  <!-- dataType name -->
 			</td>
@@ -31,12 +38,12 @@
 					Yes
 				{% endif %}
 			</td>
-			<td>                   
+			<td>
 				<div>
 					<button class="btn btn-outline-warning" onclick="window.location.href = '/update_task/{{ context.list_id }}/{{ row[0] }}'">Edit</button>
        			</div>
 			</td>
-			<td>                   
+			<td>
 				<div>
 					<button class="btn btn-outline-warning" onclick="window.location.href = '/delete_task/{{ context.list_id }}/{{ row[0] }}'">Delete</button>
         		</div>

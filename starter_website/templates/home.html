@@ -6,7 +6,13 @@
 {% block content %}
 <!-- main container -->
 <div class = "container my-3">
-
+	<div class="row">
+		<form action="/reset_database/home" method="POST">
+			<div class="form-group">
+				<button type="submit" class="btn btn-warning btn-lg">Reset Database for Testing</button>
+			</div>
+		</form>
+	</div>
 {#	<h2> {{ context.user_name }}'s To-Do Lists </h2>#}
 	<h2> {{ current_user.username }}'s To-Do Lists </h2>
 
