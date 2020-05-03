@@ -175,9 +175,17 @@ def home():
     rtn = execute_query(db_connection, query).fetchall()  # run query
     context['rows'] = rtn  # rtn = list data
 
-    db_connection.close() # close connection before returning  
+    db_connection.close() # close connection before returning
     return render_template('home.html', context=context)
 
+@webapp.route('/reset_database/home', methods=['POST'])
+def reset_database_home():
+    db_connection = connect_to_database()
+    query = "CALL reset_database()"
+    execute_query(db_connection, query)
+    flash('Reset database was successful', 'success')
+    db_connection.close() # close connection before returning
+    return redirect(url_for('home'))
 
 @webapp.route('/add_list', methods=['POST'])
 # @login_required
@@ -266,6 +274,7 @@ def invalid_access():
     Route if a user tries to access another users list of tasks
     """
     return render_template('invalid_access.html', context = None)
+
 
 
 @webapp.route('/add_task', methods=['POST'])

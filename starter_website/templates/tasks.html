@@ -3,13 +3,6 @@
 {% block content %}
 <!-- main container -->
 <div class = "container my-3">
-	<div class="row">
-		<form action="/reset_database/home" method="POST">
-			<div class="form-group">
-				<button type="submit" class="btn btn-warning btn-lg">Reset Database for Testing</button>
-			</div>
-		</form>
-	</div>
 	<h2> {{context.list_name }} </h2>
 	<blockquote class="blockquote">{{ context.list_desc }}</blockquote>
 	<table class="table">
