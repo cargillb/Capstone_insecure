@@ -157,6 +157,47 @@ def register():
         return redirect(url_for('login'))
 
 
+@webapp.route("/recoverPassword", methods=['GET', 'POST'])
+def passwordRecovery():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    if request.method == 'GET':
+        return render_template('passwordRecovery.html')
+
+    if request.method == 'POST':
+
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            flash('Password confirmation does not match password', 'danger')
+            return render_template('passwordRecovery.html')
+
+        db_connection = connect_to_database()
+
+        # make sure email is unique
+        query = 'SELECT `email` FROM users'
+        cursor = execute_query(db_connection, query)
+        rtn = cursor.fetchall()
+        cursor.close()
+        if (not any(email in i for i in rtn)):
+            flash('Email not registered, please try again', 'danger')
+            db_connection.close() # close connection before returning
+            return render_template('passwordRecovery.html')
+
+        query = ('UPDATE `users` '
+                 'SET pword = %s WHERE email = %s;')
+        data = (password, email)
+        print(query)
+        cursor = execute_query(db_connection, query, data)
+        cursor.close()
+
+        flash('Your password has been reset. You may now log in.', 'success')
+        db_connection.close() # close connection before returning
+        return redirect(url_for('login'))
+
 #-------------------------------- Home (List) Routes --------------------------------
 @webapp.route('/home')
 @login_required
