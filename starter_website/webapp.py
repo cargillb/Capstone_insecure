@@ -156,7 +156,7 @@ def register():
         db_connection.close() # close connection before returning
         return redirect(url_for('login'))
 
-
+#----------------- Password Recovery Routes ------------------------------------
 @webapp.route("/recoverPassword", methods=['GET', 'POST'])
 def passwordRecovery():
     if current_user.is_authenticated:
@@ -190,7 +190,6 @@ def passwordRecovery():
         query = ('UPDATE `users` '
                  'SET pword = %s WHERE email = %s;')
         data = (password, email)
-        print(query)
         cursor = execute_query(db_connection, query, data)
         cursor.close()
 
