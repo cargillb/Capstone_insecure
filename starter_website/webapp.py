@@ -156,6 +156,7 @@ def register():
         db_connection.close() # close connection before returning
         return redirect(url_for('login'))
 
+
 #----------------- Password Recovery Routes ------------------------------------
 
 @webapp.route("/recoverPassword", methods=['GET', 'POST'])
@@ -197,6 +198,7 @@ def passwordRecovery():
         flash('Your password has been reset. You may now log in.', 'success')
         db_connection.close() # close connection before returning
         return redirect(url_for('login'))
+
 
 #-------------------------------- Home (List) Routes --------------------------------
 @webapp.route('/home')
