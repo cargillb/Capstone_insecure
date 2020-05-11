@@ -157,6 +157,7 @@ def register():
         return redirect(url_for('login'))
 
 #----------------- Password Recovery Routes ------------------------------------
+
 @webapp.route("/recoverPassword", methods=['GET', 'POST'])
 def passwordRecovery():
     if current_user.is_authenticated:
