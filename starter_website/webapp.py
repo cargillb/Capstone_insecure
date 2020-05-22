@@ -253,7 +253,7 @@ def delete_list(list_id):
     Route to delete a list
     """
     db_connection = connect_to_database()
-    query = "DELETE FROM `lists` WHERE `list_id` = '{}'".format(list_id)
+    query = "DELETE FROM `lists` WHERE `list_id` = {}".format(list_id)
     execute_query(db_connection, query)
     flash('The list has been deleted.', 'info')
     db_connection.close() # close connection before returning
@@ -356,7 +356,7 @@ def update_task(list_id, task_id):
 
     # display current data
     if request.method == 'GET':
-        query = "SELECT * FROM `tasks` WHERE `task_id` ='{}'".format(task_id)  # get info of task
+        query = "SELECT * FROM `tasks` WHERE `task_id` = {}".format(task_id)  # get info of task
         rtn = execute_query(db_connection, query).fetchall()  # run query
         context = {'task_id': rtn[0][0], 'task_type': rtn[0][2], 'task_desc': rtn[0][3], 'task_comp': rtn[0][4], 'list_id': list_id}
 
