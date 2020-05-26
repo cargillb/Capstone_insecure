@@ -22,7 +22,7 @@
 				{{ row[5] }}  <!-- dataType name -->
 			</td>
 			<td>
-				{{ row[3] }}  <!-- description -->
+				{{ row[3]|safe }}  <!-- description -->
 			</td>
 			<td>
 				{% if row[4] == 0 %} <!-- row[4] = completed -->

@@ -29,10 +29,10 @@
 		{% for row in context.rows %}
 		<tr>
 			<td>
-				{{ row[2] }} <!-- List name -->
+				{{ row[2]|safe }} <!-- List name -->
 			</td>
 			<td>
-				{{ row[3] }} <!-- List description -->
+				{{ row[3]|safe }} <!-- List description -->
 			</td>
 			<td>
 				<div>

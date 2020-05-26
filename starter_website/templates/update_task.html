@@ -21,7 +21,7 @@
 				</select>
             </th>
             <td>
-				<input class="form-control mr-2" name="task_desc" value="{{ context.task_desc }}" type="text">
+				<input class="form-control mr-2" name="task_desc" value="{{ context.task_desc|safe }}" type="text">
             </td>
 		    <td>
                 <!-- make sure default selected is correct -->

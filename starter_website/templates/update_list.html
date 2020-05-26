@@ -11,10 +11,10 @@
         <input name="list_id" type="hidden" value="{{ context.list_id }}">
         <tr>
             <th scope="row">
-				<input class="form-control mr-2" name="list_name" value="{{ context.list_name }}" type="text">
+				<input class="form-control mr-2" name="list_name" value="{{ context.list_name|safe }}" type="text">
             </th>
             <td>
-				<input class="form-control mr-2" name="list_desc" value="{{ context.list_desc }}" type="text">
+				<input class="form-control mr-2" name="list_desc" value="{{ context.list_desc|safe }}" type="text">
             </td>
             <td>
                 <button class="btn btn-outline-success" type="submit">Update List</button>
