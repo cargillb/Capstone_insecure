@@ -22,16 +22,26 @@
 <div class="row justify-content-center">
   <h4>Insecure Site</h4>
 </div>
+<div class="row justify-content-center">
+    <div class="mt-4 lead">
+        <h6>
+          <strong> WARNING:
+          </strong>
+          This site is intended as a guide and resource for
+          implementing web attacks. With this in mind, please do not enter your sensitive
+          data into this application!
+        </h6>
+    </div>
 <div class="container">
 
     <div class="row justify-content-center">
     </div>
     <div class="row  mt-5">
-        <div class="col-4 mt-2">
+        <div class="col-4 mt-2 mr-5">
             <div>
               <form action="/reset_database" method="POST">
                 <div class="form-group">
-                    <button type="submit" class="btn btn-warning btn-block">Reset Database for Testing purposes</button>
+                    <button type="submit" class="btn btn-warning  btn-md btn-block">Reset Database for Testing Purposes</button>
                 </div>
               </form>
 
@@ -39,15 +49,15 @@
             <div>
                 <h4><em>Learn How to Hack Us</em></h4>
             </div>
-                <button type="button" onclick="window.open('./static/SQLInjection.pdf')" class="btn btn-light btn-lg btn-block">SQL Injection</button>
-                <button type="button" onclick="window.open('./static/BrokenAuthentication.pdf')" class="btn btn-light btn-lg btn-block">Broken Authentication</button>
-                <button type="button" onclick="window.open('./static/SensitiveDataExposure.pdf')" class="btn btn-light btn-lg btn-block">Sensitive Data Exposure</button>
-                <button type="button" onclick="window.open('./static/BrokenAccessControl.pdf')" class="btn btn-light btn-lg btn-block">Broken Access Control</button>
-                <button type="button" onclick="window.open('./static/XSS.pdf')" class="btn btn-light btn-lg btn-block">Cross Site Scripting (XSS)</button>
-                <button type="button" onclick="window.open('./static/InsufficientLoggingandMonitoring.pdf')" class="btn btn-light btn-lg btn-block">Insufficient Logging and Monitoring</button>
+                <button type="button" onclick="window.open('./static/SQLInjection.pdf')" class="btn btn-light btn-md btn-block">SQL Injection</button>
+                <button type="button" onclick="window.open('./static/BrokenAuthentication.pdf')" class="btn btn-light btn-md btn-block">Broken Authentication</button>
+                <button type="button" onclick="window.open('./static/SensitiveDataExposure.pdf')" class="btn btn-light btn-md btn-block">Sensitive Data Exposure</button>
+                <button type="button" onclick="window.open('./static/BrokenAccessControl.pdf')" class="btn btn-light btn-md btn-block">Broken Access Control</button>
+                <button type="button" onclick="window.open('./static/XSS.pdf')" class="btn btn-light btn-md btn-block">Cross Site Scripting (XSS)</button>
+                <button type="button" onclick="window.open('./static/InsufficientLoggingandMonitoring.pdf')" class="btn btn-light btn-md btn-block">Insufficient Logging and Monitoring</button>
         </div>
         <div class="col-6 mt-5">
-          <div class="mt-4"></div>
+          <div class="mt-4 "></div>
             <!-- source: https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=simple-login-form-->
             <div class="login-form">
 
@@ -83,21 +93,20 @@
                             <a href="{{ url_for('passwordRecovery')}}" class="ml-2">Forgot your password?</a>
                         </div>
                         <div class="d-flex justify-content-center links mt-5">
-                            <h6>Visit our <a href="https://osu-capstone-project-insecure.herokuapp.com/"> Secure Site</a> to see the result of vulnerability patching</h6>
+                            <h6>Visit our <a href="https://osu-capstone-project.herokuapp.com/" target="_blank"> Secure Site</a> to see the result of vulnerability patching</h6>
                         </div>
-
+                        <div class="d-flex justify-content-center links mt-2">
+                            <h6>Code hosted on GitHub:
+                              <a href="https://github.com/cargillb/Capstone" target="_blank"> Secure Site </a> /
+                              <a href="https://github.com/cargillb/Capstone_insecure" target="_blank"> Insecure Site </a>
+                            </h6>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-    <div class="row align-items-end">
-        <div class="d-flex justify-content-center links mt-4">
-            <h6>WARNING: This site is intended as a guide and resource for implementing web attacks. With this in mind, please do not
-              enter any sensitive data into this application!</h6>
-        </div>
-    </div>
+  </div>
 </div>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS for bootstrap -->
